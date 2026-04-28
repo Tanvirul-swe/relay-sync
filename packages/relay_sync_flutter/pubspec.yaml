@@ -1,0 +1,19 @@
+name: relay_sync_flutter
+description: Flutter integration package for relay_sync.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  relay_sync:
+    path: ../relay_sync
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
