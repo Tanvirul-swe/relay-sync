@@ -1,0 +1,9 @@
+name: relay_sync
+
+packages:
+  - packages/**
+  - examples/**
+
+scripts:
+  analyze: melos exec -- dart analyze
+  test: melos exec -- dart test
