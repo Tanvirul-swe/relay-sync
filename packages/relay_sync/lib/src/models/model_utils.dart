@@ -13,6 +13,16 @@ bool mapEquals<K, V>(Map<K, V> a, Map<K, V> b) {
   return true;
 }
 
+int mapHash<K, V>(Map<K, V> map) {
+  return Object.hashAllUnordered(
+    map.entries.map((entry) => Object.hash(entry.key, entry.value)),
+  );
+}
+
+int listHash<T>(List<T> list) {
+  return Object.hashAll(list);
+}
+
 bool listEquals<T>(List<T> a, List<T> b) {
   if (identical(a, b)) {
     return true;

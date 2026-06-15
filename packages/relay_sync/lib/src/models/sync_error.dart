@@ -61,5 +61,5 @@ class SyncError {
   }
 
   @override
-  int get hashCode => Object.hash(code, message, Object.hashAll(details.entries));
+  int get hashCode => Object.hash(code, message, mapHash(details));
 }

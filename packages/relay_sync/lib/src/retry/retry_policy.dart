@@ -2,6 +2,9 @@ import '../models/relay_sync_exception.dart';
 
 /// Strategy interface used to compute retry schedules for failed tasks.
 abstract class RetryPolicy {
+  /// Creates a retry policy.
+  const RetryPolicy();
+
   /// Returns `true` when another retry can be attempted.
   bool shouldRetry({
     required int retryCount,

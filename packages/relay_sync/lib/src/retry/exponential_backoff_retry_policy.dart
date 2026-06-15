@@ -60,8 +60,8 @@ class ExponentialBackoffRetryPolicy extends RetryPolicy {
       return null;
     }
 
-    final exponential = initialDelay.inMicroseconds * pow(multiplier, retryCount);
-    final cappedMicros = min(exponential, maxDelay.inMicroseconds.toDouble());
+    final exponential = initialDelay.inMicroseconds * pow(multiplier, retryCount).toDouble();
+    final cappedMicros = min<double>(exponential, maxDelay.inMicroseconds.toDouble());
     final adjustedMicros = _applyJitter(cappedMicros);
     return now.add(Duration(microseconds: adjustedMicros.round()));
   }

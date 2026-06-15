@@ -126,7 +126,7 @@ class SyncMetadata {
         priority,
         attempt,
         maxAttempts,
-        Object.hashAll(dependsOnTaskIds),
-        Object.hashAll(tags.entries),
+        listHash(dependsOnTaskIds),
+        mapHash(tags),
       );
 }

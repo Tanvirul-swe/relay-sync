@@ -4,6 +4,8 @@ import 'sync_enums.dart';
 import 'sync_error.dart';
 import 'sync_metadata.dart';
 
+const Object _copyWithUnset = Object();
+
 /// Immutable unit of work representing a queued API request.
 class SyncTask {
   /// Creates a validated [SyncTask].
@@ -13,8 +15,8 @@ class SyncTask {
     this.tenantId,
     required this.method,
     required this.endpoint,
-    this.body = const <String, Object?>{},
-    this.headers = const <String, String>{},
+    Map<String, Object?> body = const <String, Object?>{},
+    Map<String, String> headers = const <String, String>{},
     required this.metadata,
     this.status = SyncTaskStatus.pending,
     this.priority = SyncPriority.normal,
@@ -26,7 +28,7 @@ class SyncTask {
     this.nextRetryAt,
     this.idempotencyKey,
     this.dedupeKey,
-    this.dependsOnTaskIds = const <String>[],
+    List<String> dependsOnTaskIds = const <String>[],
     this.entityType,
     this.entityLocalId,
     this.entityRemoteId,
@@ -401,8 +403,8 @@ class SyncTask {
   /// Returns a modified copy of this task.
   SyncTask copyWith({
     String? id,
-    String? userId,
-    String? tenantId,
+    Object? userId = _copyWithUnset,
+    Object? tenantId = _copyWithUnset,
     SyncMethod? method,
     String? endpoint,
     Map<String, Object?>? body,
@@ -414,20 +416,20 @@ class SyncTask {
     int? maxRetries,
     DateTime? createdAt,
     DateTime? updatedAt,
-    DateTime? lastAttemptAt,
-    DateTime? nextRetryAt,
-    String? idempotencyKey,
-    String? dedupeKey,
+    Object? lastAttemptAt = _copyWithUnset,
+    Object? nextRetryAt = _copyWithUnset,
+    Object? idempotencyKey = _copyWithUnset,
+    Object? dedupeKey = _copyWithUnset,
     List<String>? dependsOnTaskIds,
-    String? entityType,
-    String? entityLocalId,
-    String? entityRemoteId,
-    SyncError? lastError,
+    Object? entityType = _copyWithUnset,
+    Object? entityLocalId = _copyWithUnset,
+    Object? entityRemoteId = _copyWithUnset,
+    Object? lastError = _copyWithUnset,
   }) {
     return SyncTask(
       id: id ?? this.id,
-      userId: userId ?? this.userId,
-      tenantId: tenantId ?? this.tenantId,
+      userId: identical(userId, _copyWithUnset) ? this.userId : userId as String?,
+      tenantId: identical(tenantId, _copyWithUnset) ? this.tenantId : tenantId as String?,
       method: method ?? this.method,
       endpoint: endpoint ?? this.endpoint,
       body: body ?? this.body,
@@ -439,15 +441,25 @@ class SyncTask {
       maxRetries: maxRetries ?? this.maxRetries,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      lastAttemptAt: lastAttemptAt ?? this.lastAttemptAt,
-      nextRetryAt: nextRetryAt ?? this.nextRetryAt,
-      idempotencyKey: idempotencyKey ?? this.idempotencyKey,
-      dedupeKey: dedupeKey ?? this.dedupeKey,
+      lastAttemptAt: identical(lastAttemptAt, _copyWithUnset)
+          ? this.lastAttemptAt
+          : lastAttemptAt as DateTime?,
+      nextRetryAt: identical(nextRetryAt, _copyWithUnset)
+          ? this.nextRetryAt
+          : nextRetryAt as DateTime?,
+      idempotencyKey: identical(idempotencyKey, _copyWithUnset)
+          ? this.idempotencyKey
+          : idempotencyKey as String?,
+      dedupeKey: identical(dedupeKey, _copyWithUnset) ? this.dedupeKey : dedupeKey as String?,
       dependsOnTaskIds: dependsOnTaskIds ?? this.dependsOnTaskIds,
-      entityType: entityType ?? this.entityType,
-      entityLocalId: entityLocalId ?? this.entityLocalId,
-      entityRemoteId: entityRemoteId ?? this.entityRemoteId,
-      lastError: lastError ?? this.lastError,
+      entityType: identical(entityType, _copyWithUnset) ? this.entityType : entityType as String?,
+      entityLocalId: identical(entityLocalId, _copyWithUnset)
+          ? this.entityLocalId
+          : entityLocalId as String?,
+      entityRemoteId: identical(entityRemoteId, _copyWithUnset)
+          ? this.entityRemoteId
+          : entityRemoteId as String?,
+      lastError: identical(lastError, _copyWithUnset) ? this.lastError : lastError as SyncError?,
     );
   }
 
@@ -555,14 +567,14 @@ class SyncTask {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll(<Object?>[
         id,
         userId,
         tenantId,
         method,
         endpoint,
-        Object.hashAll(body.entries),
-        Object.hashAll(headers.entries),
+        mapHash(body),
+        mapHash(headers),
         metadata,
         status,
         priority,
@@ -574,10 +586,10 @@ class SyncTask {
         nextRetryAt,
         idempotencyKey,
         dedupeKey,
-        Object.hashAll(dependsOnTaskIds),
+        listHash(dependsOnTaskIds),
         entityType,
         entityLocalId,
         entityRemoteId,
         lastError,
-      );
+      ]);
 }
