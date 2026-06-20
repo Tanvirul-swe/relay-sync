@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 void main() {
   group('AuthHeaderProvider', () {
     test('supports simple async header provider', () async {
-      final AuthHeaderProvider provider = () async {
+      Future<Map<String, String>> provider() async {
         return <String, String>{'Authorization': 'Bearer token'};
-      };
+      }
 
       expect(await provider(), {'Authorization': 'Bearer token'});
     });
 
     test('propagates provider errors', () async {
-      final AuthHeaderProvider provider = () async {
+      Future<Map<String, String>> provider() async {
         throw const RelaySyncException(message: 'token unavailable');
-      };
+      }
 
       expect(provider(), throwsA(isA<RelaySyncException>()));
     });
@@ -22,15 +22,15 @@ void main() {
 
   group('TokenRefreshHandler', () {
     test('supports simple refresh handler', () async {
-      final TokenRefreshHandler handler = () async => true;
+      Future<bool> handler() async => true;
 
       expect(await handler(), isTrue);
     });
 
     test('propagates refresh handler errors', () async {
-      final TokenRefreshHandler handler = () async {
+      Future<bool> handler() async {
         throw const RelaySyncException(message: 'refresh failed');
-      };
+      }
 
       expect(handler(), throwsA(isA<RelaySyncException>()));
     });

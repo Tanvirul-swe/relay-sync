@@ -63,9 +63,9 @@ class SyncResponse {
   }
 
   @override
-  int get hashCode {
-    final bodyHash = Object.hashAll(body.entries.map((e) => Object.hash(e.key, e.value)));
-    final headersHash = Object.hashAll(headers.entries.map((e) => Object.hash(e.key, e.value)));
-    return Object.hash(statusCode, bodyHash, headersHash);
-  }
+  int get hashCode => Object.hash(
+        statusCode,
+        mapHash(body),
+        mapHash(headers),
+      );
 }

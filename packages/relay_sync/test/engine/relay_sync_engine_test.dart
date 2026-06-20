@@ -183,7 +183,7 @@ class _FakeStorage implements SyncStorageAdapter {
   }
 }
 
-class _DeterministicRetryPolicy implements RetryPolicy {
+class _DeterministicRetryPolicy extends RetryPolicy {
   @override
   DateTime? nextRetryAt({
     required DateTime now,
@@ -198,7 +198,8 @@ class _DeterministicRetryPolicy implements RetryPolicy {
 
   @override
   bool shouldRetry({required int retryCount, required int maxRetries}) {
-    return retryCount <= maxRetries;
+    validate(retryCount: retryCount, maxRetries: maxRetries);
+    return retryCount < maxRetries;
   }
 
   @override

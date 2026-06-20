@@ -118,18 +118,15 @@ class SyncMetadata {
   }
 
   @override
-  int get hashCode {
-    final tagsHash = Object.hashAll(tags.entries.map((e) => Object.hash(e.key, e.value)));
-    return Object.hash(
-      taskId,
-      method,
-      userId,
-      tenantId,
-      priority,
-      attempt,
-      maxAttempts,
-      Object.hashAll(dependsOnTaskIds),
-      tagsHash,
-    );
-  }
+  int get hashCode => Object.hash(
+        taskId,
+        method,
+        userId,
+        tenantId,
+        priority,
+        attempt,
+        maxAttempts,
+        listHash(dependsOnTaskIds),
+        mapHash(tags),
+      );
 }
