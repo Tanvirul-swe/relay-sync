@@ -9,7 +9,10 @@ environment:
 dependencies:
   relay_sync:
     path: ../relay_sync
+  sqflite: ^2.4.2+1
+  sqflite_common: ^2.5.6+1
 
 dev_dependencies:
   lints: ^4.0.0
+  sqflite_common_ffi: ^2.4.0+3
   test: ^1.25.0

@@ -178,23 +178,28 @@ class RelaySyncConfig {
   }
 
   @override
-  int get hashCode => Object.hash(
-        autoSync,
-        maxRetries,
-        maxConcurrentTasks,
-        deleteSyncedTasks,
-        syncOnStart,
-        syncOnNetworkRestore,
-        retryPolicy,
-        Object.hashAll(defaultHeaders.entries),
-        userId,
-        tenantId,
-        requestTimeout,
-        continueOnTaskFailure,
-        enableDeduplication,
-        deduplicationStrategy,
-        enableDependencyOrdering,
-        logger,
-        metrics,
-      );
+  int get hashCode {
+    final headersHash = Object.hashAll(
+      defaultHeaders.entries.map((e) => Object.hash(e.key, e.value)),
+    );
+    return Object.hash(
+      autoSync,
+      maxRetries,
+      maxConcurrentTasks,
+      deleteSyncedTasks,
+      syncOnStart,
+      syncOnNetworkRestore,
+      retryPolicy,
+      headersHash,
+      userId,
+      tenantId,
+      requestTimeout,
+      continueOnTaskFailure,
+      enableDeduplication,
+      deduplicationStrategy,
+      enableDependencyOrdering,
+      logger,
+      metrics,
+    );
+  }
 }

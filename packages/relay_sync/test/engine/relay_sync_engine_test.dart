@@ -200,6 +200,9 @@ class _DeterministicRetryPolicy implements RetryPolicy {
   bool shouldRetry({required int retryCount, required int maxRetries}) {
     return retryCount <= maxRetries;
   }
+
+  @override
+  void validate({required int retryCount, required int maxRetries}) {}
 }
 
 SyncTask _task(

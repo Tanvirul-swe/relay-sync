@@ -333,7 +333,7 @@ class RelaySyncController {
 
   String _createTaskId() {
     if (_taskIdGenerator != null) {
-      return _taskIdGenerator!();
+      return _taskIdGenerator();
     }
     _idCounter += 1;
     return 'task-${DateTime.now().toUtc().microsecondsSinceEpoch}-$_idCounter';

@@ -4,6 +4,10 @@ import 'sync_enums.dart';
 import 'sync_error.dart';
 import 'sync_metadata.dart';
 
+/// Sentinel value used in [SyncTask.copyWith] to distinguish an explicit
+/// `null` argument from a not-provided argument for nullable fields.
+const Object _unset = Object();
+
 /// Immutable unit of work representing a queued API request.
 class SyncTask {
   /// Creates a validated [SyncTask].
@@ -13,8 +17,8 @@ class SyncTask {
     this.tenantId,
     required this.method,
     required this.endpoint,
-    this.body = const <String, Object?>{},
-    this.headers = const <String, String>{},
+    Map<String, Object?> body = const <String, Object?>{},
+    Map<String, String> headers = const <String, String>{},
     required this.metadata,
     this.status = SyncTaskStatus.pending,
     this.priority = SyncPriority.normal,
@@ -26,7 +30,7 @@ class SyncTask {
     this.nextRetryAt,
     this.idempotencyKey,
     this.dedupeKey,
-    this.dependsOnTaskIds = const <String>[],
+    List<String> dependsOnTaskIds = const <String>[],
     this.entityType,
     this.entityLocalId,
     this.entityRemoteId,
@@ -399,6 +403,9 @@ class SyncTask {
   }
 
   /// Returns a modified copy of this task.
+  ///
+  /// Pass `null` explicitly to clear nullable fields such as [nextRetryAt],
+  /// [lastAttemptAt], [lastError], [idempotencyKey], and [dedupeKey].
   SyncTask copyWith({
     String? id,
     String? userId,
@@ -414,15 +421,15 @@ class SyncTask {
     int? maxRetries,
     DateTime? createdAt,
     DateTime? updatedAt,
-    DateTime? lastAttemptAt,
-    DateTime? nextRetryAt,
-    String? idempotencyKey,
-    String? dedupeKey,
+    Object? lastAttemptAt = _unset,
+    Object? nextRetryAt = _unset,
+    Object? idempotencyKey = _unset,
+    Object? dedupeKey = _unset,
     List<String>? dependsOnTaskIds,
     String? entityType,
     String? entityLocalId,
     String? entityRemoteId,
-    SyncError? lastError,
+    Object? lastError = _unset,
   }) {
     return SyncTask(
       id: id ?? this.id,
@@ -439,15 +446,15 @@ class SyncTask {
       maxRetries: maxRetries ?? this.maxRetries,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      lastAttemptAt: lastAttemptAt ?? this.lastAttemptAt,
-      nextRetryAt: nextRetryAt ?? this.nextRetryAt,
-      idempotencyKey: idempotencyKey ?? this.idempotencyKey,
-      dedupeKey: dedupeKey ?? this.dedupeKey,
+      lastAttemptAt: identical(lastAttemptAt, _unset) ? this.lastAttemptAt : lastAttemptAt as DateTime?,
+      nextRetryAt: identical(nextRetryAt, _unset) ? this.nextRetryAt : nextRetryAt as DateTime?,
+      idempotencyKey: identical(idempotencyKey, _unset) ? this.idempotencyKey : idempotencyKey as String?,
+      dedupeKey: identical(dedupeKey, _unset) ? this.dedupeKey : dedupeKey as String?,
       dependsOnTaskIds: dependsOnTaskIds ?? this.dependsOnTaskIds,
       entityType: entityType ?? this.entityType,
       entityLocalId: entityLocalId ?? this.entityLocalId,
       entityRemoteId: entityRemoteId ?? this.entityRemoteId,
-      lastError: lastError ?? this.lastError,
+      lastError: identical(lastError, _unset) ? this.lastError : lastError as SyncError?,
     );
   }
 
@@ -555,29 +562,33 @@ class SyncTask {
   }
 
   @override
-  int get hashCode => Object.hash(
-        id,
-        userId,
-        tenantId,
-        method,
-        endpoint,
-        Object.hashAll(body.entries),
-        Object.hashAll(headers.entries),
-        metadata,
-        status,
-        priority,
-        retryCount,
-        maxRetries,
-        createdAt,
-        updatedAt,
-        lastAttemptAt,
-        nextRetryAt,
-        idempotencyKey,
-        dedupeKey,
-        Object.hashAll(dependsOnTaskIds),
-        entityType,
-        entityLocalId,
-        entityRemoteId,
-        lastError,
-      );
+  int get hashCode {
+    final bodyHash = Object.hashAll(body.entries.map((e) => Object.hash(e.key, e.value)));
+    final headersHash = Object.hashAll(headers.entries.map((e) => Object.hash(e.key, e.value)));
+    return Object.hashAll(<Object?>[
+      id,
+      userId,
+      tenantId,
+      method,
+      endpoint,
+      bodyHash,
+      headersHash,
+      metadata,
+      status,
+      priority,
+      retryCount,
+      maxRetries,
+      createdAt,
+      updatedAt,
+      lastAttemptAt,
+      nextRetryAt,
+      idempotencyKey,
+      dedupeKey,
+      Object.hashAll(dependsOnTaskIds),
+      entityType,
+      entityLocalId,
+      entityRemoteId,
+      lastError,
+    ]);
+  }
 }

@@ -1,8 +1,6 @@
 /// Flutter integration APIs for relay_sync.
 library relay_sync_flutter;
 
-/// Placeholder Flutter integration scaffold.
-class RelaySyncFlutter {
-  /// Creates a placeholder Flutter integration instance.
-  const RelaySyncFlutter();
-}
+export 'src/lifecycle/app_lifecycle_sync_observer.dart';
+export 'src/network/connectivity_plus_network_monitor.dart';
+export 'src/network/internet_health_check_monitor.dart';
